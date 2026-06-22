@@ -10,6 +10,26 @@ services:
       - "5432:5432"
     volumes:
       - cashmate_postgres_data:/var/lib/postgresql/data
+      - ../../loan-service/src/config/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  loan-service:
+    build:
+      context: ../../loan-service
+      dockerfile: Dockerfile
+    container_name: cashmate-loan-service
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      JWT_SECRET: cashmate-dev-secret
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: cashmate
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    ports:
+      - "3001:3000"
+    depends_on:
+      - postgres
 
 volumes:
   cashmate_postgres_data:
