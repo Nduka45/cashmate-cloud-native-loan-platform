@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: cashmate-postgres
+    environment:
+      POSTGRES_DB: cashmate
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - cashmate_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  cashmate_postgres_data:
