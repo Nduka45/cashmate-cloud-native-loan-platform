@@ -1,7 +1,7 @@
 CashMate 💸
 Cloud-Native Loan Management Platform
 
-🚀 CashMate is a cloud-native, microservices-based loan management platform built to demonstrate modern software engineering, DevOps, and platform engineering practices.
+CashMate is a cloud-native, microservices-based loan management platform built to demonstrate modern software engineering, DevOps, and platform engineering practices.
 
 The platform is containerized with Docker, orchestrated with Kubernetes, and deployed on both Amazon EKS (AWS) and Azure AKS (Microsoft Azure), showcasing:
 
