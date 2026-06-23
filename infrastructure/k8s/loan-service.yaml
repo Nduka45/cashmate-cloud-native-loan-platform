@@ -17,6 +17,7 @@ spec:
         - name: loan-service
           image: cashmate-loan-service:1.1
           imagePullPolicy: Never
+
           ports:
             - containerPort: 3000
 
@@ -51,6 +52,12 @@ spec:
                   name: cashmate-config
                   key: DB_NAME
 
+            - name: KAFKA_BROKER
+              valueFrom:
+                configMapKeyRef:
+                  name: cashmate-config
+                  key: KAFKA_BROKER
+
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
@@ -68,12 +75,6 @@ spec:
                 secretKeyRef:
                   name: cashmate-secrets
                   key: DB_PASSWORD
-
-                - name: KAFKA_BROKER
-                  valueFrom:
-                    configMapKeyRef:
-                      name: cashmate-config
-                      key: KAFKA_BROKER
 
           readinessProbe:
             httpGet:
