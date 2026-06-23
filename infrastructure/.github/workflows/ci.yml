@@ -1,4 +1,4 @@
-name: CashMate CI
+name: CashMate CI/CD
 
 on:
   push:
@@ -6,54 +6,37 @@ on:
       - main
       - master
 
-  pull_request:
-    branches:
-      - main
-      - master
+permissions:
+  contents: read
+  packages: write
 
 jobs:
-  loan-service:
-    name: Build Loan Service
+  build-and-push:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: loan-service
+    strategy:
+      matrix:
+        service:
+          - loan-service
+          - notification-service
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t cashmate-loan-service:ci .
+        run: |
+          docker build \
+            -t ghcr.io/${{ github.repository_owner }}/cashmate-${{ matrix.service }}:latest \
+            ./${{ matrix.service }}
 
-  notification-service:
-    name: Build Notification Service
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: notification-service
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build Docker image
-        run: docker build -t cashmate-notification-service:ci .
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/cashmate-${{ matrix.service }}:latest
