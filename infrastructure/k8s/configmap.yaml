@@ -13,4 +13,4 @@ data:
   DB_NAME: "cashmate"
 
   # Kafka
-  KAFKA_BROKER: "cashmate-kafka-service:9092"
+  KAFKA_BROKER: "kafka:9092"
