@@ -69,6 +69,12 @@ spec:
                   name: cashmate-secrets
                   key: DB_PASSWORD
 
+                - name: KAFKA_BROKER
+                  valueFrom:
+                    configMapKeyRef:
+                      name: cashmate-config
+                      key: KAFKA_BROKER
+
           readinessProbe:
             httpGet:
               path: /health

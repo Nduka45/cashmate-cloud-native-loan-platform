@@ -6,6 +6,11 @@ metadata:
 data:
   NODE_ENV: "development"
   PORT: "3000"
-  DB_HOST: "postgres"
+
+  # PostgreSQL
+  DB_HOST: "cashmate-postgres-service"
   DB_PORT: "5432"
   DB_NAME: "cashmate"
+
+  # Kafka
+  KAFKA_BROKER: "cashmate-kafka-service:9092"
