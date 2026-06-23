@@ -8,7 +8,7 @@ data:
   PORT: "3000"
 
   # PostgreSQL
-  DB_HOST: "cashmate-postgres-service"
+  DB_HOST: "postgres"
   DB_PORT: "5432"
   DB_NAME: "cashmate"
 
