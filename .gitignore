@@ -1,0 +1,34 @@
+# dependencies
+node_modules/
+*/node_modules/
+
+# env
+.env
+.env.local
+*.env
+!.env.example
+
+# logs
+logs/
+*.log
+npm-debug.log*
+
+# build/cache
+dist/
+build/
+.cache/
+coverage/
+
+# docker/k8s local artifacts
+*.tar
+*.tgz
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# local database/data
+data/
+tmp/
