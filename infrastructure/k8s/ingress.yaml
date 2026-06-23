@@ -15,3 +15,10 @@ spec:
                 name: loan-service
                 port:
                   number: 3000
+          - path: /metrics
+            pathType: Prefix
+            backend:
+              service:
+                name: loan-service
+                port:
+                  number: 3000
