@@ -1,6 +1,12 @@
 const express = require('express');
+const client = require('prom-client');
 const morgan = require('morgan');
 require('dotenv').config();
+const register = new client.Registry();
+
+client.collectDefaultMetrics({
+  register,
+});
 
 const loanRoutes = require('./routes/loan.routes');
 
@@ -38,6 +44,10 @@ app.get('/health', (req, res) => {
 */
 
 app.use('/api/loans', loanRoutes);
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
 
 /*
 |--------------------------------------------------------------------------
