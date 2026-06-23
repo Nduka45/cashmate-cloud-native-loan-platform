@@ -33,9 +33,9 @@ jobs:
       - name: Build image
         run: |
           docker build \
-            -t ghcr.io/Nduka45/cashmate-${{ matrix.service }}:latest \
+            -t ghcr.io/nduka45/cashmate-${{ matrix.service }}:latest \
             ./${{ matrix.service }}
 
       - name: Push image
         run: |
-          docker push ghcr.io/Nduka45/cashmate-${{ matrix.service }}:latest
+          docker push ghcr.io/nduka45/cashmate-${{ matrix.service }}:latest
