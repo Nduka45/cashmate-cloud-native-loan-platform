@@ -18,6 +18,9 @@ jobs:
         service:
           - loan-service
           - notification-service
+          - customer-service
+          - credit-service
+
 
     steps:
       - name: Checkout code
