@@ -15,6 +15,8 @@ const CREDIT_SERVICE_URL =
   process.env.CREDIT_SERVICE_URL || 'http://localhost:3002';
 const DISBURSEMENT_SERVICE_URL =
   process.env.DISBURSEMENT_SERVICE_URL || 'http://localhost:3004';
+const PAYMENT_SERVICE_URL =
+  process.env.PAYMENT_SERVICE_URL || 'http://localhost:3005';
 
 app.use(cors());
 app.use(morgan('dev'));
@@ -63,6 +65,15 @@ app.use(
   })
 );
 
+app.use(
+  '/api/payments',
+  createProxyMiddleware({
+    target: PAYMENT_SERVICE_URL,
+    changeOrigin: true,
+    pathRewrite: (path) => `/api/payments${path}`,
+  })
+);
+
 app.use((req, res) => {
   res.status(404).json({
     error: `Gateway route ${req.method} ${req.originalUrl} not found`,
@@ -75,4 +86,5 @@ app.listen(PORT, () => {
   console.log(`➡️ Loan Service: ${LOAN_SERVICE_URL}`);
   console.log(`➡️ Credit Service: ${CREDIT_SERVICE_URL}`);
   console.log(`➡️ Disbursement Service: ${DISBURSEMENT_SERVICE_URL}`);
+  console.log(`➡️ Payment Service: ${PAYMENT_SERVICE_URL}`);
 });
