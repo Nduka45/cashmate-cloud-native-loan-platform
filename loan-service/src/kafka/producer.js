@@ -1,19 +1,20 @@
 const { Kafka } = require('kafkajs');
+require('dotenv').config();
 
 const kafka = new Kafka({
   clientId: 'cashmate-loan-service',
-  brokers: [process.env.KAFKA_BROKER || 'kafka:9092'],
+  brokers: [process.env.KAFKA_BROKER || 'localhost:9092'],
 });
 
 const producer = kafka.producer();
 
-let connected = false;
+let isConnected = false;
 
 const connectProducer = async () => {
-  if (!connected) {
+  if (!isConnected) {
     await producer.connect();
-    connected = true;
-    console.log('✅ Kafka Producer Connected');
+    isConnected = true;
+    console.log('✅ Loan Service Kafka Producer connected');
   }
 };
 
@@ -31,8 +32,8 @@ const publishEvent = async (topic, payload) => {
     });
 
     console.log(`📨 Event published: ${topic}`);
-  } catch (error) {
-    console.error('Kafka publish error:', error.message);
+  } catch (err) {
+    console.error('Kafka publish error:', err.message);
   }
 };
 
