@@ -10,9 +10,7 @@ spec:
     - name: internal
       port: 9092
       targetPort: 9092
-
     - name: external
       port: 29092
       targetPort: 29092
-
   type: ClusterIP
