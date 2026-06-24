@@ -20,6 +20,8 @@ jobs:
           - notification-service
           - customer-service
           - credit-service
+          - api-gateway
+          - disbursement-service
 
 
     steps:
