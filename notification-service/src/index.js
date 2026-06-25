@@ -10,7 +10,7 @@ const { Kafka } = require('kafkajs');
 //
 
 const app = express();
-const PORT = process.env.PORT || 4001;
+const PORT = process.env.PORT || 3006;
 
 app.get('/health', (req, res) => {
   res.status(200).json({

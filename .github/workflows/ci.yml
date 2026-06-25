@@ -4,44 +4,79 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
   packages: write
+  security-events: write
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_OWNER: nduka45
 
 jobs:
-  build-and-push:
+  build-test-push:
+    name: Build and Push Services
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         service:
-          - loan-service
-          - notification-service
-          - customer-service
-          - credit-service
           - api-gateway
+          - customer-service
+          - loan-service
+          - credit-service
           - disbursement-service
           - payment-service
-
+          - notification-service
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Log in to GitHub Container Registry
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.service }}
+        run: npm ci
+
+      - name: Run tests if available
+        working-directory: ${{ matrix.service }}
+        run: |
+          if npm run | grep -q "test"; then
+            npm test
+          else
+            echo "No test script found. Skipping tests."
+          fi
+
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build image
-        run: |
-          docker build \
-            -t ghcr.io/nduka45/cashmate-${{ matrix.service }}:latest \
-            ./${{ matrix.service }}
+      - name: Generate Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/cashmate-${{ matrix.service }}
+          tags: |
+            type=raw,value=latest
+            type=sha,prefix=
 
-      - name: Push image
-        run: |
-          docker push ghcr.io/nduka45/cashmate-${{ matrix.service }}:latest
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./${{ matrix.service }}
+          push: ${{ github.event_name == 'push' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
