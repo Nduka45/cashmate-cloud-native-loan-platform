@@ -1,4 +1,9 @@
 const { Kafka } = require('kafkajs');
+require('dotenv').config();
+
+console.log("==========");
+console.log("Kafka broker:", process.env.KAFKA_BROKER);
+console.log("==========");
 
 const kafka = new Kafka({
   clientId: 'cashmate',

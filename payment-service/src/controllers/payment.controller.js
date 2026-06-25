@@ -1,3 +1,4 @@
+const { publishEvent } = require('../kafka/producer');
 const PaymentModel = require('../models/payment.model');
 
 exports.createPayment = async (req, res, next) => {
@@ -13,6 +14,17 @@ exports.createPayment = async (req, res, next) => {
       payment_method,
       reference,
       status: 'completed',
+    });
+
+    await publishEvent('payment-recorded', {
+      paymentId: payment.id,
+      loanId: payment.loan_id,
+      customerId: payment.customer_id,
+      amount: payment.amount,
+      paymentMethod: payment.payment_method,
+      reference: payment.reference,
+      status: payment.status,
+      createdAt: payment.created_at,
     });
 
     res.status(201).json({

@@ -1,3 +1,4 @@
+const { publishEvent } = require('../kafka/producer');
 const DisbursementModel = require('../models/disbursement.model');
 const { sendMoney } = require('../services/mockBank.service');
 
@@ -30,6 +31,21 @@ exports.createDisbursement = async (req, res, next) => {
       failure_reason: bankResult.failure_reason,
     });
 
+    await publishEvent(
+      disbursement.status === 'completed'
+        ? 'disbursement-completed'
+        : 'disbursement-failed',
+      {
+        disbursementId: disbursement.id,
+        loanId: disbursement.loan_id,
+        customerId: disbursement.customer_id,
+        amount: disbursement.amount,
+        status: disbursement.status,
+        reference: disbursement.reference,
+        createdAt: disbursement.created_at,
+      }
+    );
+
     res.status(201).json({
       message: bankResult.success
         ? 'Loan disbursement completed'
@@ -47,7 +63,9 @@ exports.getDisbursementsByLoan = async (req, res, next) => {
 
     const disbursements = await DisbursementModel.findByLoanId(loan_id);
 
-    res.status(200).json({ disbursements });
+    res.status(200).json({
+      disbursements,
+    });
   } catch (err) {
     next(err);
   }
