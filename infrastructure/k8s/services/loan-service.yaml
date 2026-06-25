@@ -3,20 +3,32 @@ kind: Deployment
 metadata:
   name: loan-service
   namespace: cashmate
+
 spec:
   replicas: 2
+
   selector:
     matchLabels:
       app: loan-service
+
+  revisionHistoryLimit: 5
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
   template:
     metadata:
       labels:
         app: loan-service
+
     spec:
       containers:
         - name: loan-service
           image: cashmate-loan-service:1.2
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
 
           ports:
             - containerPort: 3000
@@ -90,6 +102,12 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 20
 
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+
           resources:
             requests:
               memory: "128Mi"
@@ -97,17 +115,3 @@ spec:
             limits:
               memory: "256Mi"
               cpu: "250m"
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: loan-service
-  namespace: cashmate
-spec:
-  selector:
-    app: loan-service
-  ports:
-    - port: 3000
-      targetPort: 3000
-  type: ClusterIP
