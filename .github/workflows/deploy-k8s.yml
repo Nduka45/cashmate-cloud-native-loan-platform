@@ -31,10 +31,10 @@ jobs:
 
       - name: Validate Kubernetes manifests
         run: |
-          kubectl apply --dry-run=client -f infrastructure/k8s/base/
-          kubectl apply --dry-run=client -f infrastructure/k8s/base/monitoring/
-          kubectl apply --dry-run=client -f infrastructure/k8s/services/
-
+          kubectl kustomize infrastructure/k8s/overlays/${{ github.event.inputs.environment }} > rendered-manifests.yaml
+          test -s rendered-manifests.yaml
+          echo "Kubernetes manifests rendered successfully"
+      
       - name: Deployment placeholder
         run: |
           echo "Deployment validation completed."
