@@ -17,6 +17,40 @@ spec:
         - name: notification-service
           image: cashmate-notification-service:1.0
           imagePullPolicy: Never
+
+          ports:
+            - containerPort: 4001
+
           env:
+            - name: PORT
+              value: "4001"
+
             - name: KAFKA_BROKER
               value: "kafka:9092"
+
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 4001
+            failureThreshold: 30
+            periodSeconds: 5
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 4001
+            initialDelaySeconds: 5
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4001
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false

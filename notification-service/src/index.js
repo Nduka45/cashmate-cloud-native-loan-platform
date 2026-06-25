@@ -1,9 +1,42 @@
 require('dotenv').config();
+
+const express = require('express');
 const { Kafka } = require('kafkajs');
+
+//
+// -------------------------------------
+// Health Server
+// -------------------------------------
+//
+
+const app = express();
+const PORT = process.env.PORT || 4001;
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'UP',
+    service: 'notification-service',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(
+    `🚀 Notification Health Server running on port ${PORT}`
+  );
+});
+
+//
+// -------------------------------------
+// Kafka Consumer
+// -------------------------------------
+//
 
 const kafka = new Kafka({
   clientId: 'cashmate-notification-service',
-  brokers: [process.env.KAFKA_BROKER || 'kafka:9092'],
+  brokers: [
+    process.env.KAFKA_BROKER || 'localhost:9092',
+  ],
 });
 
 const consumer = kafka.consumer({
@@ -11,54 +44,107 @@ const consumer = kafka.consumer({
 });
 
 async function start() {
-  await consumer.connect();
+  try {
+    await consumer.connect();
 
-  console.log('✅ Notification Service Connected');
+    console.log('✅ Notification Service Connected');
 
-  await consumer.subscribe({
-    topic: 'loan-created',
-    fromBeginning: true,
-  });
+    await consumer.subscribe({
+      topic: 'loan-created',
+      fromBeginning: false,
+    });
 
-  await consumer.subscribe({
-    topic: 'loan-approved',
-    fromBeginning: true,
-  });
+    await consumer.subscribe({
+      topic: 'loan-approved',
+      fromBeginning: false,
+    });
 
-  await consumer.subscribe({
-    topic: 'loan-rejected',
-    fromBeginning: true,
-  });
+    await consumer.subscribe({
+      topic: 'loan-rejected',
+      fromBeginning: false,
+    });
 
-  await consumer.run({
-    eachMessage: async ({ topic, message }) => {
-      const data = JSON.parse(message.value.toString());
+    await consumer.subscribe({
+      topic: 'disbursement-completed',
+      fromBeginning: false,
+    });
 
-      console.log('--------------------------------');
-      console.log(`📨 Event: ${topic}`);
-      console.log(data);
+    await consumer.subscribe({
+      topic: 'payment-completed',
+      fromBeginning: false,
+    });
 
-      switch (topic) {
-        case 'loan-created':
-          console.log(
-            `📧 Loan application received from customer ${data.customerId}`
-          );
-          break;
+    await consumer.subscribe({
+      topic: 'payment-failed',
+      fromBeginning: false,
+    });
 
-        case 'loan-approved':
-          console.log(
-            `✅ Loan approved for customer ${data.customerId}`
-          );
-          break;
+    console.log('✅ Kafka subscriptions ready');
 
-        case 'loan-rejected':
-          console.log(
-            `❌ Loan rejected for customer ${data.customerId}`
-          );
-          break;
-      }
-    },
-  });
+    await consumer.run({
+      eachMessage: async ({
+        topic,
+        partition,
+        message,
+      }) => {
+        const data = JSON.parse(
+          message.value.toString()
+        );
+
+        console.log('--------------------------------');
+        console.log(`📨 Event: ${topic}`);
+        console.log(data);
+
+        switch (topic) {
+          case 'loan-created':
+            console.log(
+              `📧 Loan application received from customer ${data.customerId}`
+            );
+            break;
+
+          case 'loan-approved':
+            console.log(
+              `✅ Loan approved for customer ${data.customerId}`
+            );
+            break;
+
+          case 'loan-rejected':
+            console.log(
+              `❌ Loan rejected for customer ${data.customerId}`
+            );
+            break;
+
+          case 'disbursement-completed':
+            console.log(
+              `💸 Loan disbursed to customer ${data.customerId}`
+            );
+            break;
+
+          case 'payment-completed':
+            console.log(
+              `💰 Payment received from customer ${data.customerId}`
+            );
+            break;
+
+          case 'payment-failed':
+            console.log(
+              `⚠️ Payment failed for customer ${data.customerId}`
+            );
+            break;
+
+          default:
+            console.log(
+              `Unknown event received: ${topic}`
+            );
+        }
+      },
+    });
+  } catch (error) {
+    console.error(
+      '❌ Notification Service Error:',
+      error
+    );
+  }
 }
 
-start().catch(console.error);
+start();
