@@ -1,0 +1,42 @@
+name: Deploy CashMate to Kubernetes
+
+"on":
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Deployment environment"
+        required: true
+        default: "local"
+        type: choice
+        options:
+          - local
+          - aks
+          - eks
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Validate Kubernetes manifests
+        run: |
+          kubectl apply --dry-run=client -f infrastructure/k8s/base/
+          kubectl apply --dry-run=client -f infrastructure/k8s/base/monitoring/
+          kubectl apply --dry-run=client -f infrastructure/k8s/services/
+
+      - name: Deployment placeholder
+        run: |
+          echo "Deployment validation completed."
+          echo "Environment: ${{ github.event.inputs.environment }}"
+          echo "Next phase will connect AKS/EKS kubeconfig secrets."
