@@ -1,10 +1,10 @@
 const { Kafka } = require('kafkajs');
 require('dotenv').config();
 
-console.log('Disbursement Kafka broker:', process.env.KAFKA_BROKER);
+console.log('Payment Kafka broker:', process.env.KAFKA_BROKER);
 
 const kafka = new Kafka({
-  clientId: 'cashmate-disbursement-service',
+  clientId: 'cashmate-payment-service',
   brokers: [process.env.KAFKA_BROKER || 'localhost:29092'],
 });
 
@@ -16,7 +16,7 @@ const connectProducer = async () => {
   if (!isConnected) {
     await producer.connect();
     isConnected = true;
-    console.log('✅ Disbursement Service Kafka Producer connected');
+    console.log('✅ Payment Service Kafka Producer connected');
   }
 };
 
