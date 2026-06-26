@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: loan-service
-          image: ghcr.io/nduka45/cashmate-loan-service:$(GIT_SHA)
+          image: ghcr.io/nduka45/cashmate-loan-service:1.2
           imagePullPolicy: IfNotPresent
 
           ports:

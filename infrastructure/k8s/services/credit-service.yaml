@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: credit-service
-          image: ghcr.io/nduka45/cashmate-credit-service:$(GIT_SHA)
+          image: ghcr.io/nduka45/cashmate-credit-service:1.2
           imagePullPolicy: IfNotPresent
 
           ports:
