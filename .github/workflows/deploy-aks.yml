@@ -1,12 +1,47 @@
-name: Deploy to AKS
+name: Deploy CashMate to AKS
 
-on:
+"on":
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
-  placeholder:
+  deploy-aks:
+    name: Deploy to Azure AKS
     runs-on: ubuntu-latest
 
     steps:
-      - name: Placeholder
-        run: echo "AKS deployment placeholder"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set AKS context
+        uses: azure/aks-set-context@v4
+        with:
+          resource-group: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          cluster-name: ${{ secrets.AKS_CLUSTER_NAME }}
+
+      - name: Render AKS manifests
+        run: |
+          kubectl kustomize infrastructure/k8s/overlays/aks > aks-rendered.yaml
+          test -s aks-rendered.yaml
+
+      - name: Deploy to AKS
+        run: |
+          kubectl apply -k infrastructure/k8s/overlays/aks
+
+      - name: Verify rollout
+        run: |
+          kubectl rollout status deployment/api-gateway -n cashmate
+          kubectl rollout status deployment/customer-service -n cashmate
+          kubectl rollout status deployment/loan-service -n cashmate
+          kubectl rollout status deployment/credit-service -n cashmate
+          kubectl rollout status deployment/disbursement-service -n cashmate
+          kubectl rollout status deployment/payment-service -n cashmate
+          kubectl rollout status deployment/notification-service -n cashmate
