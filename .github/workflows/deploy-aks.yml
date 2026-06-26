@@ -1,0 +1,12 @@
+name: Deploy to AKS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  placeholder:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Placeholder
+        run: echo "AKS deployment placeholder"
