@@ -7,6 +7,5 @@ resources:
   - secret.yaml
   - postgres.yaml
   - kafka-deployment.yaml
-  - kafka-service.yaml
   - monitoring/prometheus.yaml
   - monitoring/grafana.yaml

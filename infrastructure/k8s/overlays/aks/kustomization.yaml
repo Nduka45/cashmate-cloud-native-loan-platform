@@ -3,8 +3,22 @@ kind: Kustomization
 
 resources:
   - ../../base
-  - ../../services
+  - ../../apps
+
+namespace: cashmate
 
 images:
   - name: ghcr.io/nduka45/cashmate-api-gateway
-    newTag: latest
+    newTag: v1
+  - name: ghcr.io/nduka45/cashmate-credit-service
+    newTag: v1
+  - name: ghcr.io/nduka45/cashmate-customer-service
+    newTag: v1
+  - name: ghcr.io/nduka45/cashmate-loan-service
+    newTag: v1
+  - name: ghcr.io/nduka45/cashmate-payment-service
+    newTag: v1
+  - name: ghcr.io/nduka45/cashmate-notification-service
+    newTag: v1
+  - name: ghcr.io/nduka45/cashmate-disbursement-service
+    newTag: v1

@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: disbursement-service
+  namespace: cashmate
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: disbursement-service
+
+  revisionHistoryLimit: 5
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  template:
+    metadata:
+      labels:
+        app: disbursement-service
+
+    spec:
+      containers:
+        - name: disbursement-service
+          image: ghcr.io/nduka45/cashmate-disbursement-service:v1
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 3004
+
+          env:
+            - name: PORT
+              value: "3004"
+
+            - name: DB_HOST
+              value: "postgres"
+
+            - name: DB_PORT
+              value: "5432"
+
+            - name: DB_NAME
+              value: "cashmate"
+
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cashmate-secrets
+                  key: DB_USER
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cashmate-secrets
+                  key: DB_PASSWORD
+
+            - name: KAFKA_BROKER
+              value: "kafka:9092"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3004
+            initialDelaySeconds: 20
+            periodSeconds: 20
+
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"
