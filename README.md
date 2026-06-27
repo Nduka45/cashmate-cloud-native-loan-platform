@@ -283,10 +283,8 @@ This project demonstrates practical experience with:
 
 Grafana dashboards
 
-```
-<img width="1536" height="1024" alt="grafana dashboard" src="https://github.com/user-attachments/assets/fbe8f58a-71dc-487c-bda1-c1a9ec82ec81" />
+<img width="1536" height="1024" alt="grafana dashboard" src="https://github.com/user-attachments/assets/49c208ee-89de-40f2-93f9-85483b3b25b8" />
 
-```
 
 ---
 
