@@ -281,9 +281,9 @@ This project demonstrates practical experience with:
 
 ## 📸 Screenshots
 
-Place architecture diagrams, Grafana dashboards, and AKS/EKS deployment screenshots in:
+Grafana dashboards
 
-```text
+```
 <img width="1536" height="1024" alt="grafana dashboard" src="https://github.com/user-attachments/assets/fbe8f58a-71dc-487c-bda1-c1a9ec82ec81" />
 
 ```
