@@ -293,7 +293,7 @@ Grafana dashboards
 **Sunday Nduka**
 
 * GitHub: https://github.com/nduka45
-* LinkedIn: https://linkedin.com/in/YOUR-LINKEDIN
+* LinkedIn: https://www.linkedin.com/in/sunday-nduka-6b28b0143
 * Email: [ndukasunday18@gmail.com](mailto:ndukasunday18@gmail.com)
 
 ---
