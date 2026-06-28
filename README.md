@@ -1,6 +1,6 @@
 # 💸 CashMate Cloud-Native Loan Platform
 
-> A production-ready, cloud-native microservices platform for digital loan management, built with Node.js, Docker, Kubernetes, Apache Kafka, and deployed across AWS EKS and Azure AKS.
+> A cloud-native microservices platform for digital loan management, built with Node.js, Docker, Kubernetes, Apache Kafka, and deployed across AWS EKS and Azure AKS.
 
 ![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=for-the-badge\&logo=node.js\&logoColor=white)
 ![Express](https://img.shields.io/badge/Express.js-Framework-000000?style=for-the-badge\&logo=express\&logoColor=white)
