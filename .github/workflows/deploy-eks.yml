@@ -1,6 +1,6 @@
 name: Deploy CashMate to EKS
 
-"on":
+on:
   workflow_dispatch:
 
 permissions:
