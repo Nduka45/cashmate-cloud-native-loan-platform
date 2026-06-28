@@ -1,0 +1,13 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: cashmate-eks
+  region: eu-central-1
+
+managedNodeGroups:
+  - name: cashmate-workers
+    instanceType: t3.micro
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 2
