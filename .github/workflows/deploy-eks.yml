@@ -29,6 +29,27 @@ jobs:
             --region eu-central-1 \
             --name cashmate-eks
 
+      - name: Debug repository
+        run: |
+          echo "Current commit:"
+          git rev-parse HEAD
+          echo "Searching for services references:"
+          grep -R "services" infrastructure/k8s || true
+
+      - name: Show Debug repository
+        run: |
+          echo "Current commit:"
+          git rev-parse HEAD
+          
+          echo "Searching for services references:"
+          grep -R "services" infrastructure/k8s || true
+          
+          echo "EKS kustomization:"
+          cat infrastructure/k8s/overlays/eks/kustomization.yaml
+
+          echo "Local kustomization:"
+          cat infrastructure/k8s/overlays/local/kustomization.yaml
+
       - name: Render EKS manifests
         run: |
           kubectl kustomize infrastructure/k8s/overlays/eks > eks-rendered.yaml
