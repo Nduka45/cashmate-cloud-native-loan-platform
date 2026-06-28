@@ -1,0 +1,77 @@
+.dashboard{
+    padding:30px;
+}
+
+.dashboard h1{
+    margin-bottom:5px;
+}
+
+.dashboard p{
+    color:#666;
+    margin-bottom:35px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
+
+.card h3{
+    color:#666;
+    margin-bottom:15px;
+    font-size:16px;
+}
+
+.card h2{
+    font-size:34px;
+    color:#1d4ed8;
+}
+
+.card span{
+    color:#888;
+    font-size:14px;
+}
+
+.bottom-grid{
+    margin-top:35px;
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:25px;
+}
+
+.activity,
+.status{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
+
+.activity ul{
+    margin-top:20px;
+}
+
+.activity li{
+    list-style:none;
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+}
+
+.status-item{
+    display:flex;
+    justify-content:space-between;
+    margin-top:18px;
+}
+
+.online{
+    color:#16a34a;
+    font-weight:bold;
+}
