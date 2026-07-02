@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: credit-service
+  namespace: cashmate
+spec:
+  selector:
+    app: credit-service
+  ports:
+    - port: 3002
+      targetPort: 3002
+  type: ClusterIP

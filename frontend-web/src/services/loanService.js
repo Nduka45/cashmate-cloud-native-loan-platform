@@ -12,7 +12,7 @@ export const createLoan = async (loanData) => {
 };
 
 export const getMyLoans = async () => {
-  const response = await api.get("/api/loans", {
+  const response = await api.get("/api/loans/mine", {
     headers: {
       "x-user-id": "e147afb2-5482-4600-8b6a-efef7fb12b26",
       "x-user-role": "customer",

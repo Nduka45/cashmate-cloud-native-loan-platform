@@ -10,3 +10,11 @@ resources:
   - disbursement-service.yaml
   - payment-service.yaml
   - notification-service.yaml
+
+  - api-gateway-service.yaml
+  - customer-service-service.yaml
+  - loan-service-service.yaml
+  - credit-service-service.yaml
+  - disbursement-service-service.yaml
+  - payment-service-service.yaml
+  - notification-service-service.yaml
