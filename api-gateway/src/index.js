@@ -18,7 +18,7 @@ const DISBURSEMENT_SERVICE_URL =
 const PAYMENT_SERVICE_URL =
   process.env.PAYMENT_SERVICE_URL || 'http://localhost:3005';
 const NOTIFICATION_SERVICE_URL =
-  process.env.NOTIFICATION_SERVICE_URL || "http://notification-service:3006";
+  process.env.NOTIFICATION_SERVICE_URL || "http://localhost:3006";
 
 app.use(cors());
 app.use(morgan('dev'));
