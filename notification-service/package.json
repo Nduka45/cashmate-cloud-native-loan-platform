@@ -1,7 +1,7 @@
 {
-  "name": "cashmate-loan-service",
+  "name": "CashMate-Notification-Service",
   "version": "1.0.0",
-  "description": "CashMate Loan Service",
+  "description": "CashMate Notification Service",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
