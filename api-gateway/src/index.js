@@ -17,6 +17,8 @@ const DISBURSEMENT_SERVICE_URL =
   process.env.DISBURSEMENT_SERVICE_URL || 'http://localhost:3004';
 const PAYMENT_SERVICE_URL =
   process.env.PAYMENT_SERVICE_URL || 'http://localhost:3005';
+const NOTIFICATION_SERVICE_URL =
+  process.env.NOTIFICATION_SERVICE_URL || "http://notification-service:3006";
 
 app.use(cors());
 app.use(morgan('dev'));
@@ -73,6 +75,13 @@ app.use(
     pathRewrite: (path) => `/api/payments${path}`,
   })
 );
+app.use(
+  "/api/notifications",
+  createProxyMiddleware({
+    target: NOTIFICATION_SERVICE_URL,
+    changeOrigin: true,
+  })
+);
 
 app.use((req, res) => {
   res.status(404).json({
@@ -87,4 +96,5 @@ app.listen(PORT, () => {
   console.log(`➡️ Credit Service: ${CREDIT_SERVICE_URL}`);
   console.log(`➡️ Disbursement Service: ${DISBURSEMENT_SERVICE_URL}`);
   console.log(`➡️ Payment Service: ${PAYMENT_SERVICE_URL}`);
+  console.log(`➡️ Notification Service: ${NOTIFICATION_SERVICE_URL}`);
 });
